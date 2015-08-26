@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^about/', views.about, name='about'),
     #url(r'^(?P<category>[a-zA-Z]+)/', views.cat, name='cat'),
     url(r'^category/(?P<category>[\w\s]+)/$', views.cat, name='category'),
-    url(r'^add_category/$', views.add_category, name='add category'),
+    url(r'^add_category/$', views.add_category, name='add_category'),
 ]
