@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Regions,Shippers,Suppliers,Category,Page
+from .models import Regions,Shippers,Suppliers,Category,Page,UserProfile
 
 class PageAdmin(admin.ModelAdmin):
 
@@ -10,3 +10,4 @@ admin.site.register(Shippers)
 admin.site.register(Suppliers)
 admin.site.register(Category)
 admin.site.register(Page,PageAdmin)
+admin.site.register(UserProfile)
