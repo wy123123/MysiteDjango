@@ -11,7 +11,6 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-
 class Regions(models.Model):
     regionid = models.IntegerField(db_column='RegionID', primary_key=True)  # Field name made lowercase.
     regiondescription = models.TextField(db_column='RegionDescription')  # Field name made lowercase.
@@ -45,6 +44,8 @@ class Suppliers(models.Model):
 
     class Meta:
         db_table = 'Suppliers'
+
+
 class Category(models.Model):
     name = models.CharField(max_length = 128, unique = True)
     views = models.IntegerField(default = 0)
