@@ -35,7 +35,7 @@ class PageForm(forms.ModelForm):
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget = forms.PasswordInput())
-
+    password_confirm = forms.CharField(required = True, widget = forms.PasswordInput())
     class Meta:
         model = User
         fields = ['username','email','password']

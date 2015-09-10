@@ -1,27 +1,10 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+
 {% load staticfiles %}
-<html>
 
-    <head>
-        <title>Rango</title>
-    </head>
-
-    <body>
-    <div>
-    {% if user.is_authenticated %}
-    <h1>Rango says ...hello {{ user.username }}  </h1>
-     <a href ="{%url 'add_page'}">Add a new page!</a>
-        <br/>
-    <a href="{%url 'add_category'}">Add a new category!</a>
-            <br/>
-    <a href ="{%url 'logout' %}">Log out!</a>
-    {%else%}
-        <h1>Rango says...<strong>hello world! </strong></h1>
-                <a href="{%url 'login'%}">Login</a> <a href="{%url 'register'%}">Register Here</a><br/>
-
-    {%endif%}
-    </div>
-    <div>
+{% block title %}Main Page{% endblock %}
+{%block body_block%}
+<div>
     <h2>Top 5 Categories</h2>
         {% if categories %}
         <ul>
@@ -34,8 +17,6 @@
         {% else %}
         <strong> there are no categories present </strong>
         {% endif %}
-
-        <img src="{% static "rango/Rango.jpg" %}" alt="Picture of Rango" />
         <br /><!-- New line -->
         <h2>Top 5 Pages</h2>
         {% if pages %}
@@ -49,8 +30,12 @@
         {% else %}
         <strong>There are no pages available!</strong>
         {% endif %}
-        </div>
-        <a href="{%url 'about'%}">About</a><br />
-    </body>
+</div>
+{%endblock%}
 
-</html>
+
+
+
+
+
+

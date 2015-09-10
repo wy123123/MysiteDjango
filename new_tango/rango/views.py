@@ -5,19 +5,56 @@ from django.http import HttpResponse
 from rango.models import *
 from rango.form import *
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
+from rango.PWvalidation import *
+from django.core.exceptions import ValidationError
 # Create your views here.
 
 def index(request):
+    request.session.set_test_cookie()
+    if request.session.test_cookie_worked():
+        print ">>>> TEST COOKIE WORKED!"
+        request.session.delete_test_cookie()
+
     category_list = Category.objects.order_by("-likes")[:5]
-    #Construct a dictionary to pass to the template engine as its context.
-    # Note the key boldmessage is the same as {{ boldmessage }} in the template!
     context_dict = {'categories': category_list}
     page_list = Page.objects.order_by('-views')[:5]
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
     context_dict['pages'] = page_list
-    return render(request, 'rango/index.html', context_dict)
+
+    visits = int(request.COOKIES.get('visits', '1'))
+
+    reset_last_visit_time = False
+    response = render(request, 'rango/index.html', context_dict)
+    # Does the cookie last_visit exist?
+    if 'last_visit' in request.COOKIES:
+        # Yes it does! Get the cookie's value.
+        last_visit = request.COOKIES['last_visit']
+        # Cast the value to a Python date/time object.
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+        # If it's been more than a day since the last visit...
+        if (datetime.now() - last_visit_time).days > 0:
+            visits = visits + 1
+            # ...and flag that the cookie last visit needs to be updated
+            reset_last_visit_time = True
+    else:
+        # Cookie last_visit doesn't exist, so flag that it should be set.
+        reset_last_visit_time = True
+
+        context_dict['visits'] = visits
+
+        #Obtain our Response object early so we can add cookie information.
+        response = render(request, 'rango/index.html', context_dict)
+
+    if reset_last_visit_time:
+        response.set_cookie('last_visit', datetime.now())
+        response.set_cookie('visits', visits)
+
+    # Return response back to the user, updating any cookies that need changed.
+    return response
 	
 def about(request):
     return render(request, 'rango/about.html', {})
@@ -30,7 +67,7 @@ def cat(request, category):
     pages_list = Page.objects.filter(category = cates)
     context_dict['pages'] = pages_list
 
-    return render(request,'rango/page.html', context_dict)
+    return render(request,'rango/category.html', context_dict)
 
 @login_required
 def add_category(request):
@@ -90,30 +127,34 @@ def register(request):
 
         # If the two forms are valid...
         if user_form.is_valid() and profile_form.is_valid():
-            # Save the user's form data to the database.
-            user = user_form.save()
+            #check password is matched
 
+            if user_form.cleaned_data['password'] != user_form.cleaned_data['password_confirm']:
+                user_form._errors["password"] = ["Password do not match"]
+            # Save the user's form data to the database.
+            else:
+                user = user_form.save()
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
-            user.set_password(user.password)
-            user.save()
+                user.set_password(user.password)
+                user.save()
 
             # Now sort out the UserProfile instance.
             # Since we need to set the user attribute ourselves, we set commit=False.
             # This delays saving the model until we're ready to avoid integrity problems.
-            profile = profile_form.save(commit=False)
-            profile.user = user
+                profile = profile_form.save(commit=False)
+                profile.user = user
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
+                if 'picture' in request.FILES:
+                    profile.picture = request.FILES['picture']
 
             # Now we save the UserProfile model instance.
-            profile.save()
+                profile.save()
 
             # Update our variable to tell the template registration was successful.
-            registered = True
+                registered = True
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
