@@ -111,7 +111,7 @@ def add_page(request):
         form = PageForm()
     return render(request,'rango/add_page.html',{'form': form})
 
-
+'''
 def register(request):
 
     # A boolean value for telling the template whether the registration was successful.
@@ -172,8 +172,9 @@ def register(request):
     return render(request,
             'rango/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
+'''
 
-
+'''
 def user_login(request):
 
     # If the request is a HTTP POST, try to pull out the relevant information.
@@ -221,4 +222,4 @@ def user_logout(request):
     logout(request)
 
     # Take the user back to the homepage.
-    return HttpResponseRedirect('/rango/')
+    return HttpResponseRedirect('/rango/')'''
