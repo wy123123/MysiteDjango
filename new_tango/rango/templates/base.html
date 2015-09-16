@@ -7,7 +7,6 @@
 </head>
 <body>
 <div>
-    <a href="{% url 'index'%}">Back to Main page</a>
     {% if user.is_authenticated %}
           <h2>Welcome to Rango! {{ user.username }} !</h2>
     {% else %}
@@ -17,23 +16,21 @@
 <div>
     {%block content%}{%endblock%}
 </div>
-
 <hr/>
 <div>
             <ul>
             {% if user.is_authenticated %}
                 <li> (<a href="{% url 'auth_logout' %}">Log out</a> |
-        <a href="{% url 'auth_password_change' %}">Change Password</a>)</li>
-                <!--
-                <li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>-->
+                    <a href="{% url 'auth_password_change' %}">Change Password</a>)</li>
                 <li><a href="{% url "add_category"%}">Add a New Category</a></li>
                 <li><a href="{% url "add_page"%}">Add a New Page</a></li>
             {% else %}
-                <li><a href="{% url "registration_register"%}">Register Here</a></li>
-                <li><a href="{% url 'auth_login' %}">Login</a></li>
+                <li><a href="{% url 'auth_login' %}">Login</a> |
+                    <a href="{% url "registration_register"%}">Register Here</a>
+                </li>
             {% endif %}
-
-                <li><a href="{%url "about"%}">About</a></li>
+                <li><a href="{%url "about"%}">About</a>  |
+                    <a href="{% url 'index'%}">Back to Main page</a></li>
             </ul>
 </div>
 </body>

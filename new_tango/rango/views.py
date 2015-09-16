@@ -5,16 +5,17 @@ from django.http import HttpResponse
 from rango.models import *
 from rango.form import *
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from datetime import datetime
 from rango.PWvalidation import *
 from django.core.exceptions import ValidationError
 # Create your views here.
 
 def index(request):
-    request.session.set_test_cookie()
+    '''request.session.set_test_cookie()
     if request.session.test_cookie_worked():
         print ">>>> TEST COOKIE WORKED!"
-        request.session.delete_test_cookie()
+        request.session.delete_test_cookie()'''
 
     category_list = Category.objects.order_by("-likes")[:5]
     context_dict = {'categories': category_list}
@@ -172,9 +173,9 @@ def register(request):
     return render(request,
             'rango/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
-'''
 
-'''
+
+
 def user_login(request):
 
     # If the request is a HTTP POST, try to pull out the relevant information.
@@ -223,3 +224,16 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/rango/')'''
+'''
+@login_required
+def change_pw(request):
+     if request.method == 'POST':
+        # Gather the username and password provided by the user.
+        # This information is obtained from the login form.
+                # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
+                # because the request.POST.get('<variable>') returns None, if the value does not exist,
+                # while the request.POST['<variable>'] will raise key error exception
+        oldpw = request.POST.get('password1')
+        if request.user.
+        password = request.POST.get('password')
+        '''

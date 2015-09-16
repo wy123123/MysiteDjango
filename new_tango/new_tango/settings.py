@@ -31,14 +31,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
+    #'registration',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'registration',
+    #'registration',
     'rango',
+    'django.contrib.admin',
+    'registration',
+    #'django.contrib.auth',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,7 +60,9 @@ ROOT_URLCONF = 'new_tango.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [#os.path.join(BASE_DIR, 'rango/templates'),
+                 #os.path.join(BASE_DIR, 'rango/templates/registration'),
+                 os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
