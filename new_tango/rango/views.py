@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.http import HttpResponse
@@ -12,7 +12,8 @@ from django.core.exceptions import ValidationError
 # Create your views here.
 
 def index(request):
-    '''request.session.set_test_cookie()
+    request.session.set_test_cookie()
+    '''
     if request.session.test_cookie_worked():
         print ">>>> TEST COOKIE WORKED!"
         request.session.delete_test_cookie()'''
@@ -111,6 +112,16 @@ def add_page(request):
     else:
         form = PageForm()
     return render(request,'rango/add_page.html',{'form': form})
+
+def search_cat(request):
+    if request.method == 'POST':
+        search_text = request.POST['search_text']
+    else:
+        search_text = ''
+
+    cats = Category.objects.filter(name__contains = search_text)
+
+    return render_to_response('ajax_search.html', {"Category":cats})
 
 '''
 def register(request):

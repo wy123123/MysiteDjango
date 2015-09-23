@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}search{% endblock %}
+
+{% block side_block%}
+{% csrf_token %}
+{%for cat in cats %}
+<li>
+     <a href = '{% url 'category' cat.name %}'>{{cat.name}}</a>
+</li>
+{%endblock%}
