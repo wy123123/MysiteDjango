@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'new_tango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'C:/Users/Lovebonito/Desktop/sqlite/rangotest1.db'
+        'NAME': os.path.join(BASE_DIR, 'rangotest1.db'),
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
